@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pelanggan;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
-class PelangganController extends Controller
+class KategoriController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,12 +14,12 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $data = Pelanggan::orderBy('id','DESC')->get();
+        $data = Kategori::orderBy('id','DESC')->get();
 
         if(request()->ajax()){
             return datatables()->of($data)
                                 ->addColumn('action', function($data){
-                                    $button = '<button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="component.edit('. $data->id .')">Edit</button>';
+                                    $button = '<button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="component.edit('.$data->id.')">Edit</button>';
                                     $button .= '<button class="btn btn-sm btn-danger ms-1" onclick="component.hapus('. $data->id .')">Hapus</button>';
 
                                     return $button;
@@ -27,8 +27,6 @@ class PelangganController extends Controller
                                 ->rawColumns(['action'])
                                 ->make(true);
         }
-
-        return view('user.pelanggan.pelanggan');
     }
 
     /**
@@ -50,30 +48,17 @@ class PelangganController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'nama' => 'required',
-            'email' => 'required|unique:pelanggans,email|email',
-            'telp' => 'required|numeric|digits_between:1,15',
-            'alamat' => 'required'
+            'nama' => 'required'
         ],[
-            'nama.required' => 'Nama harus di isi',
-            'email.required' => 'Email harus di isi',
-            'email.unique' => 'Email sudah terdaftar',
-            'email.email' => 'Email tidak valid',
-            'telp.required' => 'Telepon harus di isi',
-            'telp.numeric' => 'Telepon harus angka',
-            'telp.digits_between' => 'Telepon maksimal 15 digit',
-            'alamat.required' => 'Alamat harus di isi'
+            'nama.required' => 'Nama harus di isi'
         ]);
 
-        Pelanggan::create([
-            'nama' => ucwords(request('nama')),
-            'email' => request('email'),
-            'telp' => request('telp'),
-            'alamat' => request('alamat')
+        Kategori::create([
+            'nama' => ucwords(request('nama'))
         ]);
 
         return response()->json([
-            'message' => 'pelanggan berhasil ditambahkan'
+            'message' => 'kategori berhasil ditambahkan'
         ]);
     }
 
@@ -85,9 +70,10 @@ class PelangganController extends Controller
      */
     public function show($id)
     {
-        $data = Pelanggan::find($id);
+        $data = Kategori::find($id);
 
         return response()->json([
+            'message' => 'detail kategori',
             'data' => $data
         ]);
     }
@@ -113,27 +99,19 @@ class PelangganController extends Controller
     public function update(Request $request, $id)
     {
         request()->validate([
-            'nama' => 'required',
-            'telp' => 'required|numeric|digits_between:1,15',
-            'alamat' => 'required'
+            'nama' => 'required'
         ],[
-            'nama.required' => 'Nama harus di isi',
-            'telp.required' => 'Telepon harus di isi',
-            'telp.numeric' => 'Telepon harus angka',
-            'telp.digits_between' => 'Telepon maksimal 15 digit',
-            'alamat.required' => 'Alamat harus di isi'
+            'nama.required' => 'Nama harus di isi'
         ]);
 
-        $data = Pelanggan::find($id);
+        $data = Kategori::find($id);
 
         $data->update([
-            'nama' => ucwords(request('nama')),
-            'telp' => request('telp'),
-            'alamat' => request('alamat')
+            'nama' => ucwords(request('nama'))
         ]);
 
         return response()->json([
-            'message' => 'pelanggan berhasil di edit'
+            'message' => 'kategori berhasil di edit'
         ]);
     }
 
@@ -145,12 +123,12 @@ class PelangganController extends Controller
      */
     public function destroy($id)
     {
-        $data = Pelanggan::find($id);
+        $data = Kategori::find($id);
 
         $data->delete();
 
         return response()->json([
-            'message' => 'pelanggan berhasil di hapus'
+            'message' => 'kategori berhasil di hapus'
         ]);
     }
 }

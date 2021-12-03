@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pelanggan;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
-class PelangganController extends Controller
+class SupplierController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $data = Pelanggan::orderBy('id','DESC')->get();
+        $data = Supplier::orderBy('id','DESC')->get();
 
         if(request()->ajax()){
             return datatables()->of($data)
@@ -27,8 +27,6 @@ class PelangganController extends Controller
                                 ->rawColumns(['action'])
                                 ->make(true);
         }
-
-        return view('user.pelanggan.pelanggan');
     }
 
     /**
@@ -51,21 +49,21 @@ class PelangganController extends Controller
     {
         request()->validate([
             'nama' => 'required',
-            'email' => 'required|unique:pelanggans,email|email',
+            'email' => 'required|email|unique:suppliers,email',
             'telp' => 'required|numeric|digits_between:1,15',
             'alamat' => 'required'
         ],[
             'nama.required' => 'Nama harus di isi',
             'email.required' => 'Email harus di isi',
-            'email.unique' => 'Email sudah terdaftar',
             'email.email' => 'Email tidak valid',
+            'email.unique' => 'Email sudah terdaftar',
             'telp.required' => 'Telepon harus di isi',
             'telp.numeric' => 'Telepon harus angka',
             'telp.digits_between' => 'Telepon maksimal 15 digit',
             'alamat.required' => 'Alamat harus di isi'
         ]);
 
-        Pelanggan::create([
+        Supplier::create([
             'nama' => ucwords(request('nama')),
             'email' => request('email'),
             'telp' => request('telp'),
@@ -73,7 +71,7 @@ class PelangganController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'pelanggan berhasil ditambahkan'
+            'message' => 'supplier berhasil ditambahkan'
         ]);
     }
 
@@ -85,9 +83,10 @@ class PelangganController extends Controller
      */
     public function show($id)
     {
-        $data = Pelanggan::find($id);
+        $data = Supplier::find($id);
 
         return response()->json([
+            'message' => 'detail supplier',
             'data' => $data
         ]);
     }
@@ -124,7 +123,7 @@ class PelangganController extends Controller
             'alamat.required' => 'Alamat harus di isi'
         ]);
 
-        $data = Pelanggan::find($id);
+        $data = Supplier::find($id);
 
         $data->update([
             'nama' => ucwords(request('nama')),
@@ -133,7 +132,7 @@ class PelangganController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'pelanggan berhasil di edit'
+            'message' => 'supplier berhasil di edit'
         ]);
     }
 
@@ -145,12 +144,12 @@ class PelangganController extends Controller
      */
     public function destroy($id)
     {
-        $data = Pelanggan::find($id);
+        $data = Supplier::find($id);
 
         $data->delete();
 
         return response()->json([
-            'message' => 'pelanggan berhasil di hapus'
+            'message' => 'supplier berhasil di hapus'
         ]);
     }
 }

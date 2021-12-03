@@ -21,8 +21,8 @@ class AdminController extends Controller
         return view('admin.kategori');
     }
 
-    public function barang()
+    public function barangs()
     {
-        return view('admin.barang');
+        return view('admin.barangs');
     }
 }

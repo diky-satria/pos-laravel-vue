@@ -11,6 +11,8 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="{{ asset('template/css/styles.css') }}" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{{ asset('template/css/custom.css') }}">
+        @stack('css')
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -52,7 +54,7 @@
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ url('supplier') }}">Supplier</a>
                                     <a class="nav-link" href="{{ url('kategori') }}">Kategori</a>
-                                    <a class="nav-link" href="{{ url('barang') }}">Barang</a>
+                                    <a class="nav-link" href="{{ url('barangs') }}">Barang</a>
                                 </nav>
                             </div>
                             @endif
@@ -139,6 +141,7 @@
                 </footer>
             </div>
         </div>
+        <script src="{{ asset('template/js/jquery.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="{{ asset('template/js/scripts.js') }}"></script>
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -153,5 +156,28 @@
                return new bootstrap.Tooltip(tooltipTriggerEl)
             })
         </script>
+
+        <!-- vue js -->
+        <script src="{{ asset('template/js/vue.js') }}"></script>
+        <script src="{{ asset('template/js/axios.js') }}"></script>
+        <script src="{{ asset('template/js/sweetalert.js') }}"></script>
+
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                },
+                iconColor: 'green',
+                background: 'rgb(91, 255, 96)'
+            })
+        </script>
+
+        @stack('js')
     </body>
 </html>
