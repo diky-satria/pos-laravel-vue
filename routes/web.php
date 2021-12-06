@@ -39,11 +39,12 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('supplier', [AdminController::class, 'supplier']);
         Route::get('kategori', [AdminController::class, 'kategori']);
         Route::get('barangs', [AdminController::class, 'barangs']);
-        Route::get('petugas', [PetugasController::class, 'index']);
-
+        
         Route::group(['prefix' => 'data'], function(){
             Route::resource('supplier', SupplierController::class);
             Route::resource('kategori', KategoriController::class);
+            Route::resource('petugas', PetugasController::class);
+
 
             Route::get('data_select', [BarangController::class, 'data_select']);
             Route::get('barang', [BarangController::class, 'index']);
@@ -56,9 +57,19 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::resource('pelanggan', PelangganController::class);
 
+    //route transaksi
+    Route::get('kode_tgl', [PenjualanController::class, 'kode_tgl']);
+    Route::get('select_barang', [PenjualanController::class, 'select_barang']);
+    Route::get('select_pelanggan', [PenjualanController::class, 'select_pelanggan']);
     Route::get('penjualan', [PenjualanController::class, 'index']);
+    Route::post('tambah_transaksi', [PenjualanController::class, 'tambah_transaksi']);
+    Route::get('detail_data_transaksi/{kode}', [PenjualanController::class, 'detail_data_transaksi']);
+    Route::delete('hapus_data_transaksi/{id_barang}/{id_pivot}/{qty}', [PenjualanController::class, 'hapus_data_transaksi']);
+    Route::patch('tambah_data_transaksi/{id_barang}/{id_pivot}', [PenjualanController::class, 'tambah_data_transaksi']);
+    Route::patch('kurang_data_transaksi/{id_barang}/{id_pivot}', [PenjualanController::class, 'kurang_data_transaksi']);
+    Route::post('update_status_transaksi/{kode}', [PenjualanController::class, 'update_status_transaksi']);
 
-    Route::get('riwayat', [RiwayatController::class, 'index']);
+    Route::resource('riwayat', RiwayatController::class);
 
     Route::get('barang-in', [BarangInController::class, 'index']);
 

@@ -12,6 +12,7 @@
         <link href="{{ asset('template/css/styles.css') }}" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="{{ asset('template/css/custom.css') }}">
+        <link rel="stylesheet" href="{{ asset('template/css/select2.css') }}">
         @stack('css')
     </head>
     <body class="sb-nav-fixed">
@@ -100,7 +101,7 @@
                             <div class="sb-sidenav-menu-heading">Pengaturan</div>
 
                             @if(Auth()->user()->hasRole('admin'))
-                            <a class="nav-link" href="{{ url('petugas') }}">
+                            <a class="nav-link" href="{{ url('data/petugas') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Petugas
                             </a>
@@ -123,7 +124,7 @@
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Login sebagai : admin</div>
+                        <div class="small">Login sebagai : {{ Auth::user()->roles()->pluck('name')[0] }}</div>
                         {{ Auth::user()->name; }}
                     </div>
                 </nav>
@@ -161,6 +162,7 @@
         <script src="{{ asset('template/js/vue.js') }}"></script>
         <script src="{{ asset('template/js/axios.js') }}"></script>
         <script src="{{ asset('template/js/sweetalert.js') }}"></script>
+        <script src="{{ asset('template/js/select2.js') }}"></script>
 
         <script>
             const Toast = Swal.mixin({
@@ -176,6 +178,8 @@
                 iconColor: 'green',
                 background: 'rgb(91, 255, 96)'
             })
+
+            
         </script>
 
         @stack('js')
