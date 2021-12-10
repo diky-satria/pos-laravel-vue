@@ -2,28 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use App\Models\TransaksiBarang;
 
-class RiwayatController extends Controller
+class PenjualanGagalController extends Controller
 {
     public function index()
     {
-        $query = Transaksi::orderBy('id','DESC');
-
-        if(request('status')){
-            $query = $query->where('status', request('status') - 1);
-        }
-
-        if(request('tgl')){
-            $query = $query->where('tgl', request('tgl'));
-        }
-
-        $data = $query->get();
+        $data = Transaksi::where('status', 0)->orderBy('id', 'DESC')->get();
 
         if(request()->ajax()){
             return datatables()->of($data)
-                                ->addColumn('tgl', function($data){ 
+                                ->addColumn('tgl', function($data){
                                     return date('j M Y', strtotime($data->tgl));
                                 })
                                 ->addColumn('pelanggan', function($data){
@@ -49,13 +41,13 @@ class RiwayatController extends Controller
                                 ->addColumn('action', function($data){
                                     $button = '<button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="component.detail('. $data->id .')">Detail</button>';
 
+                                    $button .= '<button class="btn btn-sm btn-warning ms-1" onclick="component.kembalikan('. $data->id .')">Kembalikan Barang</button>';
+
                                     return $button;
                                 })
                                 ->rawColumns(['pelanggan','petugas','jumlah','status','action'])
                                 ->make(true);
         }
-
-        return view('user.riwayat.riwayat');
     }
 
     public function show($id)
@@ -90,6 +82,32 @@ class RiwayatController extends Controller
         return response()->json([
             'data' => $data,
             'detail' => $detail
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $transaksi = Transaksi::find($id);
+
+        $trans_bar = TransaksiBarang::where('id_transaksi', $id)->get();
+
+        // kembalikan stok barang
+        foreach($trans_bar as $tb){
+            $barang = Barang::find($tb->id_barang);
+
+            $barang->update([
+                'stok' => $barang->stok + $tb->qty
+            ]);
+        }
+
+        // hapus data di table transaksi barang
+        TransaksiBarang::where('id_transaksi', $id)->delete();
+
+        // hapus data di table transaksi
+        $transaksi->delete();
+
+        return response()->json([
+            'message' => 'berhasil'
         ]);
     }
 }

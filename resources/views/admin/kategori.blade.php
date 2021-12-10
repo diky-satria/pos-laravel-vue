@@ -105,8 +105,10 @@
         methods: {
             ambilData(){
                 $('#table').DataTable({
-                    serverSide: true,
-                    responsive: true,
+                    processing: true,
+                    language: {
+                        url: '{{ asset("template/json/datatables-indonesia.json") }}'
+                    },
                     ajax: {
                         type: 'GET',
                         url: 'data/kategori'

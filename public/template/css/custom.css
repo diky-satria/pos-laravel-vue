@@ -9,3 +9,14 @@
 .form-control{
     box-shadow: none !important;
 }
+.active{
+    background-color: #ffffff;
+    color:black !important;
+    font-weight: bold;
+    border-radius:20px;
+    margin:0 10px;
+}
+.nav-link.active .sb-nav-link-icon{
+    color:black !important;
+    font-weight: bold;
+}

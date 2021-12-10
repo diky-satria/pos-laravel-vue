@@ -18,7 +18,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">POS BENGKEL</a>
+            <a class="navbar-brand ps-3" href="{{ url('dashboard') }}">POS</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar-->
@@ -42,7 +42,7 @@
                             
                             @if(Auth()->user()->hasRole('admin'))
                             <div class="sb-sidenav-menu-heading">Admin</div>
-                            <a class="nav-link" href="{{ url('dashboard') }}">
+                            <a class="nav-link {{ request()->is('dashboard') || request()->is('home') ? 'active' : '' }}" href="{{ url('dashboard') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
@@ -53,11 +53,17 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{ url('supplier') }}">Supplier</a>
-                                    <a class="nav-link" href="{{ url('kategori') }}">Kategori</a>
-                                    <a class="nav-link" href="{{ url('barangs') }}">Barang</a>
+                                    <a class="nav-link {{ request()->is('supplier') ? 'active' : '' }}" href="{{ url('supplier') }}">
+                                        Supplier
+                                    </a>
+                                    <a class="nav-link {{ request()->is('kategori') ? 'active' : '' }}" href="{{ url('kategori') }}">Kategori</a>
+                                    <a class="nav-link {{ request()->is('barangs') ? 'active' : '' }}" href="{{ url('barangs') }}">Barang</a>
                                 </nav>
                             </div>
+                            <a class="nav-link {{ request()->is('penjualan_gagal') ? 'active' : '' }}" href="{{ url('penjualan_gagal') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Penjualan Gagal
+                            </a>
                             @endif
 
                             <div class="sb-sidenav-menu-heading">Petugas</div>
@@ -68,9 +74,9 @@
                             </a>
                             <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{ url('penjualan') }}">Penjualan</a>
-                                    <a class="nav-link" href="{{ url('riwayat') }}">Riwayat</a>
-                                    <a class="nav-link" href="{{ url('pelanggan') }}">Pelanggan</a>
+                                    <a class="nav-link {{ request()->is('penjualan') ? 'active' : '' }}" href="{{ url('penjualan') }}">Penjualan</a>
+                                    <a class="nav-link {{ request()->is('riwayat') ? 'active' : '' }}" href="{{ url('riwayat') }}">Riwayat</a>
+                                    <a class="nav-link {{ request()->is('pelanggan') ? 'active' : '' }}" href="{{ url('pelanggan') }}">Pelanggan</a>
                                 </nav>
                             </div>
 
@@ -81,8 +87,8 @@
                             </a>
                             <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{ url('barang-in') }}">Barang In</a>
-                                    <a class="nav-link" href="{{ url('barang-out') }}">Barang Out</a>
+                                    <a class="nav-link {{ request()->is('barang-in') ? 'active' : '' }}" href="{{ url('barang-in') }}">Barang In</a>
+                                    <a class="nav-link {{ request()->is('barang-out') ? 'active' : '' }}" href="{{ url('barang-out') }}">Barang Out</a>
                                 </nav>
                             </div>
 
@@ -93,16 +99,16 @@
                             </a>
                             <div class="collapse" id="collapseLayouts3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{ url('laporan-harian') }}">Harian</a>
-                                    <a class="nav-link" href="{{ url('laporan-bulanan') }}">Bulanan</a>
+                                    <a class="nav-link {{ request()->is('laporan-harian') ? 'active' : '' }}" href="{{ url('laporan-harian') }}">Harian</a>
+                                    <a class="nav-link {{ request()->is('laporan-bulanan') ? 'active' : '' }}" href="{{ url('laporan-bulanan') }}">Bulanan</a>
                                 </nav>
                             </div>
 
                             <div class="sb-sidenav-menu-heading">Pengaturan</div>
 
                             @if(Auth()->user()->hasRole('admin'))
-                            <a class="nav-link" href="{{ url('data/petugas') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <a class="nav-link {{ request()->is('data/petugas') ? 'active' : '' }}" href="{{ url('data/petugas') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Petugas
                             </a>
                             @endif

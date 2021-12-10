@@ -12,29 +12,15 @@
     .tr-edited{
         border:0px solid transparent;
     }
-</style> 
+</style>
 @endpush
 
 @section('content')
 <div id="component">
     <div class="container-fluid px-4">
         <div class="row my-4">
-            <div class="col-md">
-                <h5>Riwayat</h5>
-            </div>
-            <div class="col-md">
-                <div class="row">
-                    <div class="col-md">
-                        <select class="form-control" id="status">
-                            <option value="3">-- Status --</option>
-                            <option value="2">Berhasil</option>
-                            <option value="1">Gagal</option>
-                        </select>
-                    </div>
-                    <div class="col-md">
-                        <input type="date" id="tanggal" class="form-control">
-                    </div>
-                </div>
+            <div class="col">
+                <h5>Penjualan Gagal</h5>
             </div>
         </div>
         <div class="row">
@@ -54,13 +40,12 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                        </table> 
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -69,7 +54,7 @@
                     <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="modal-body">
+                <div class="modal-body">
 
                     <div class="row my-4">
                         <div class="col-md-3">
@@ -106,24 +91,24 @@
                                 <tr class="tr-edited">
                                     <th colspan="4" class="text-end"><div class="mt-2">Total</div></th>
                                     <td>
-                                        <input id="total" :value="datas.total" type="text" class="form-control fce text-end mt-2"  readonly>
+                                        <input id="total" type="text" :value="datas.total" class="form-control fce text-end mt-2"  readonly>
                                     </td>
                                 </tr>
                                 <tr class="tr-edited">
                                     <th colspan="4" class="text-end">Tunai</th>
                                     <td>
-                                        <input id="tunai" :value="datas.tunai" type="text" class="form-control fce text-end" readonly>
+                                        <input id="tunai" type="text" :value="datas.tunai" class="form-control fce text-end" readonly>
                                     </td>
                                 </tr>
                                 <tr class="tr-edited">
                                     <th colspan="4" class="text-end">Kembali</th>
                                     <td>
-                                        <input id="kembalian" :value="datas.kembalian" type="text" class="form-control fce text-end" readonly>
+                                        <input id="kembalian" type="text" :value="datas.kembalian" class="form-control fce text-end" readonly>
                                     </td>
                                 </tr>
                                 <tr class="tr-edited">
                                     <th colspan="4" class="text-end">Pelanggan</th>
-                                    <td><input id="kembalian" :value="datas.nama_pelanggan" type="text" class="form-control fce text-end" readonly></td>
+                                    <td><input id="kembalian" type="text" :value="datas.nama_pelanggan" class="form-control fce text-end" readonly></td>
                                 </tr>
 
                                 <!-- hitung -->
@@ -133,9 +118,6 @@
                     </div>
 
                 </div>
-                <div class="modal-footer">
-                    <button @click="cetakStruk" class="btn btn-sm btn-success float-end">Cetak</button>
-                </div>
             </div>
         </div>
     </div>
@@ -144,30 +126,26 @@
 
 @push('js')
 <script type="text/javascript" src="{{ asset('template/js/datatables.js') }}"></script>
-<script src="{{ asset('template/js/html2pdf.js') }}"></script>
 <script>
-    var url = '{{ url("riwayat") }}'
-
     var component = new Vue({
         el: '#component',
-        data:{
+        data: {
             datas: [],
-            details: [],
-            url: url
+            details: []
         },
         mounted(){
-            this.ambilRiwayat()
+            this.ambilData()
         },
         methods: {
-            ambilRiwayat(){
-                this.table = $('#table').DataTable({
+            ambilData(){
+                $('#table').DataTable({
                     processing: true,
                     language: {
                         url: '{{ asset("template/json/datatables-indonesia.json") }}'
                     },
                     ajax: {
                         type: 'GET',
-                        url: this.url
+                        url: 'data/penjualan_gagal'
                     },
                     columns   : [
                         {
@@ -187,7 +165,7 @@
                 })
             },
             async detail(id){
-                let response = await axios.get('riwayat/'+id)
+                let response = await axios.get('data/penjualan_gagal/'+id)
                 this.datas = response.data.data
                 this.details = response.data.detail
             },
@@ -206,37 +184,26 @@
                 rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah
                 return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '')
             },
-            cetakStruk(){
-                var element = document.getElementById('modal-body');
-                var opt = {
-                    margin:       [20, 5, 0, 5],
-                    filename:     'struk.pdf'
-                };
+            kembalikan(id){ 
+                Swal.fire({
+                    title: 'Kembalikan Sekarang',
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Lanjutkan'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.delete('data/penjualan_gagal/'+ id)
 
-                html2pdf().set(opt).from(element).save()
-            },
-        }
-    })
+                        $('#table').DataTable().ajax.reload()
 
-    // data berdasarkan status
-    $('#status').on('change', function(){
-        sts = $('#status').val()
-
-        if(sts == 3){
-            component.table.ajax.url(url).load()
-        }else{
-            component.table.ajax.url(url + '?status='+ sts).load()
-        }
-    })
-
-    // data berdasarkan tanggal
-    $('#tanggal').on('change', function(){
-        tgl = $('#tanggal').val()
-
-        if(tgl == ''){
-            component.table.ajax.url(url).load()
-        }else{
-            component.table.ajax.url(url + '?tgl='+ tgl).load()
+                        Swal.fire(
+                            'Berhasil',
+                            'Barang di transaksi ini stoknya sudah bertambah lagi',
+                            'success'
+                        )
+                    }
+                })
+            }
         }
     })
 </script>

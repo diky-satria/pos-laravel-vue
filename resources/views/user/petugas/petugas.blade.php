@@ -60,7 +60,7 @@
                             <!-- tambah -->
                             <input type="text" v-if="editMode == false" v-model="form.email" class="form-control">
                             <!-- edit -->
-                            <input type="text" v-if="editMode == true" v-model="formEdit.email" class="form-control" readonly>
+                            <input type="text" v-if="editMode == true" v-model="formEdit.email" class="form-control">
 
                             <div class="form-text text-danger" v-if="errors['email']">@{{ errors['email'][0] }}</div>
                         </div>
@@ -69,14 +69,16 @@
                             <!-- tambah -->
                             <input type="password" v-if="editMode == false" v-model="form.password" class="form-control">
                             <!-- edit -->
-                            <input type="password" v-if="editMode == true" v-model="formEdit.password" class="form-control" placeholder="ubah password disini">
+                            <input type="password" v-if="editMode == true" v-model="formEdit.password" class="form-control">
 
                             <div class="form-text text-danger" v-if="errors['password']">@{{ errors['password'][0] }}</div>
                         </div>
-                        <div class="form-group mb-3" v-if="editMode == false">
+                        <div class="form-group mb-3">
                             <label>Konfirmasi Password</label>
                             <!-- tambah -->
-                            <input type="password" v-model="form.konfirmasi_password" class="form-control">
+                            <input type="password" v-if="editMode == false" v-model="form.konfirmasi_password" class="form-control">
+                            <!-- edit -->
+                            <input type="password" v-if="editMode == true" v-model="formEdit.konfirmasi_password" class="form-control">
 
                             <div class="form-text text-danger" v-if="errors['konfirmasi_password']">@{{ errors['konfirmasi_password'][0] }}</div>
                         </div>
@@ -135,8 +137,10 @@
         methods: {
             ambilData(){
                 $('#table').DataTable({
-                    serveSide: true,
-                    responsive: true,
+                    processing: true,
+                    language: {
+                        url: '{{ asset("template/json/datatables-indonesia.json") }}'
+                    },
                     ajax: {
                         type: 'GET',
                         url: 'petugas'
@@ -193,7 +197,8 @@
                 this.formEdit = response.data.data
             },
             async actionEdit(id){
-                let btn = document.getElementById('btn-edit')
+                let btn = document.getElementById('btn-edit') 
+                this.errors = []
                 try{
                     btn.setAttribute('disabled', true)
                     this.load = true

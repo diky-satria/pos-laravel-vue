@@ -13,6 +13,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\BarangOutController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\PenjualanGagalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,12 +40,13 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('supplier', [AdminController::class, 'supplier']);
         Route::get('kategori', [AdminController::class, 'kategori']);
         Route::get('barangs', [AdminController::class, 'barangs']);
+        Route::get('penjualan_gagal', [AdminController::class, 'penjualan_gagal']);
         
         Route::group(['prefix' => 'data'], function(){
             Route::resource('supplier', SupplierController::class);
             Route::resource('kategori', KategoriController::class);
             Route::resource('petugas', PetugasController::class);
-
+            Route::resource('penjualan_gagal', PenjualanGagalController::class);
 
             Route::get('data_select', [BarangController::class, 'data_select']);
             Route::get('barang', [BarangController::class, 'index']);
@@ -76,6 +78,12 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('barang-out', [BarangOutController::class, 'index']);
 
     Route::get('laporan-harian', [LaporanController::class, 'laporan_harian']);
+    Route::get('export-harian-excel', [LaporanController::class, 'exportHarianExcel']);
+    Route::get('export-harian-pdf', [LaporanController::class, 'exportHarianPdf']);
+
     Route::get('laporan-bulanan', [LaporanController::class, 'laporan_bulanan']);
+    Route::get('laporan-bulanan-data', [LaporanController::class, 'laporan_bulanan_data']);
+    Route::get('export-bulanan-excel', [LaporanController::class, 'exportBulananExcel']);
+    Route::get('export-bulanan-pdf', [LaporanController::class, 'exportBulananPdf']);
 });
 

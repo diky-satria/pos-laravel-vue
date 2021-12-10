@@ -216,31 +216,22 @@ class PenjualanController extends Controller
     {
         $transaksi = Transaksi::where('kode', $kode)->first();
 
-        $cek = request('id_pelanggan');
-        if($cek == 'umum'){
-            $transaksi->update([
-                'id_pelanggan' => null,
-                'status' => 1,
-                'total' => request('total'),
-                'tunai' => request('tunai'),
-                'kembalian' => request('kembalian')
-            ]);
-        }else{
-            request()->validate([
-                'id_pelanggan' => 'required'
-            ],[
-                'id_pelanggan.required' => 'Pelanggan harus di pilih'
-            ]);
-    
-            $transaksi->update([
-                'id_pelanggan' => request('id_pelanggan'),
-                'status' => 1,
-                'total' => request('total'),
-                'tunai' => request('tunai'),
-                'kembalian' => request('kembalian')
-            ]);
-        }
+        request()->validate([
+            'tunai' => 'required|numeric', 
+            'id_pelanggan' => 'required'
+        ],[
+            'tunai.required' => 'Tunai harus di isi',
+            'tunai.numeric' => 'Tunai harus angka',
+            'id_pelanggan.required' => 'Pelanggan harus di pilih'
+        ]);
 
+        $transaksi->update([
+            'id_pelanggan' => request('id_pelanggan') == 'umum' ? null : request('id_pelanggan'),
+            'status' => 1,
+            'total' => request('total'),
+            'tunai' => request('tunai'),
+            'kembalian' => request('kembalian')
+        ]);
 
         return response()->json([
             'message' => 'status transaksi berhasil di update'

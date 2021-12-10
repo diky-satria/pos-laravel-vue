@@ -75,7 +75,7 @@ class PetugasController extends Controller
         ]);
 
         $petugas = User::create([
-            'name' => request('name'),
+            'name' => ucwords(request('name')),
             'email' => request('email'),
             'password' => bcrypt(request('password'))
         ]);
@@ -122,25 +122,45 @@ class PetugasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        request()->validate([
-            'name' => 'required',
-        ],[
-            'name.required' => 'Nama harus di isi',
-        ]);
-
+        
         $petugas = User::find($id);
-
+        
         $pass = request('password');
         if($pass){
+            request()->validate([
+                'name' => 'required',
+                'email' => request('email') == $petugas->email ? 'required|email' : 'required|email|unique:users,email',
+                'password' => 'min:8',
+                'konfirmasi_password' => 'required|same:password'
+            ],[
+                'name.required' => 'Nama harus di isi',
+                'email.required' => 'Email harus di isi',
+                'email.email' => 'Email tidak valid',
+                'email.unique' => 'Email sudah terdaftar',
+                'password.min' => 'Password minimal 8 karakter',
+                'konfirmasi_password.required' => 'Konfirmasi password harus di isi',
+                'konfirmasi_password.same' => 'Konfirmasi password salah'
+            ]);
 
             $petugas->update([
-                'name' => request('name'),
+                'name' => ucwords(request('name')),
+                'email' => request('email'),
                 'password' => bcrypt(request('password'))
             ]);
         }else{
+            request()->validate([
+                'name' => 'required',
+                'email' => request('email') == $petugas->email ? 'required|email' : 'required|email|unique:users,email',
+            ],[
+                'name.required' => 'Nama harus di isi',
+                'email.required' => 'Email harus di isi',
+                'email.email' => 'Email tidak valid',
+                'email.unique' => 'Email sudah terdaftar',
+            ]);
 
             $petugas->update([
-                'name' => request('name')
+                'name' => ucwords(request('name')),
+                'email' => request('email'),
             ]);
         }
 

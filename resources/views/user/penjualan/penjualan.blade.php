@@ -68,7 +68,7 @@
                 <div class="col-md text-center">
                     <div>
                         <img src="{{ asset('template_gambar/dadu.png') }}" class="mt-5">
-                        <h6>Halaman Transaksi</h6>
+                        <h6>Halaman Penjualan</h6>
                         <h6>Anda belum memilih barang</h6>
                     </div>
                 </div>                                      
@@ -113,6 +113,7 @@
                                         <label for="staticEmail" class="col-sm-3 col-form-label"><div class="float-end fw-bold">Tunai</div></label>
                                         <div class="col-sm-9">
                                             <input id="tunai" name="tunai" type="text" v-model="tunai" class="form-control fce text-end">
+                                            <div class="form-text text-danger" v-if="error_pelanggan['tunai']">@{{ error_pelanggan['tunai'][0] }}</div>
                                         </div>
                                     </div>
                                     <div class="row">

@@ -61,7 +61,7 @@
                             <!-- tambah -->
                             <input type="text" v-if="editMode == false" v-model="form.email" class="form-control">
                             <!-- edit -->
-                            <input type="text" v-if="editMode == true" v-model="formEdit.email" class="form-control" readonly>
+                            <input type="text" v-if="editMode == true" v-model="formEdit.email" class="form-control">
 
                             <div class="form-text text-danger" v-if="errors['email']">@{{ errors['email'][0] }}</div>
                         </div>
@@ -138,8 +138,10 @@
         methods: {
             ambilData(){
                 $('#table').DataTable({
-                    serverSide: true,
-                    responsive: true,
+                    processing: true,
+                    language: {
+                        url: '{{ asset("template/json/datatables-indonesia.json") }}'
+                    },
                     ajax      : {
                         type: 'GET',
                         url : 'data/supplier'

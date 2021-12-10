@@ -111,22 +111,27 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = Supplier::find($id);
+
         request()->validate([
             'nama' => 'required',
+            'email' => request('email') == $data->email ? 'required|email' : 'required|email|unique:suppliers,email',
             'telp' => 'required|numeric|digits_between:1,15',
             'alamat' => 'required'
         ],[
             'nama.required' => 'Nama harus di isi',
+            'email.required' => 'Email harus di isi',
+            'email.email' => 'Email tidak valid',
+            'email.unique' => 'Email sudah terdaftar',
             'telp.required' => 'Telepon harus di isi',
             'telp.numeric' => 'Telepon harus angka',
             'telp.digits_between' => 'Telepon maksimal 15 digit',
             'alamat.required' => 'Alamat harus di isi'
         ]);
 
-        $data = Supplier::find($id);
-
         $data->update([
             'nama' => ucwords(request('nama')),
+            'email' => request('email'),
             'telp' => request('telp'),
             'alamat' => request('alamat')
         ]);
