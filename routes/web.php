@@ -70,12 +70,21 @@ Route::group(['middleware' => 'auth'], function(){
     Route::patch('tambah_data_transaksi/{id_barang}/{id_pivot}', [PenjualanController::class, 'tambah_data_transaksi']);
     Route::patch('kurang_data_transaksi/{id_barang}/{id_pivot}', [PenjualanController::class, 'kurang_data_transaksi']);
     Route::post('update_status_transaksi/{kode}', [PenjualanController::class, 'update_status_transaksi']);
+    Route::get('print/{kode}', [PenjualanController::class, 'print']);
 
     Route::resource('riwayat', RiwayatController::class);
 
     Route::get('barang-in', [BarangInController::class, 'index']);
+    Route::get('ambil_data_barang', [BarangInController::class, 'ambil_data_barang']);
+    Route::post('tambah_barang_in', [BarangInController::class, 'tambah_barang_in']);
+    Route::get('detail_barang_in/{id}', [BarangInController::class, 'show']);
+    Route::post('barang_in/{id}', [BarangInController::class, 'update']);
+    Route::delete('barang_in/{id}', [BarangInController::class, 'destroy']);
+    Route::patch('barang_in/{id}', [BarangInController::class, 'konfirmasi']);
 
     Route::get('barang-out', [BarangOutController::class, 'index']);
+    Route::get('barang_tidak_kosong', [BarangOutController::class, 'barang_tidak_kosong']);
+    Route::post('barang_out', [BarangOutController::class, 'store']);
 
     Route::get('laporan-harian', [LaporanController::class, 'laporan_harian']);
     Route::get('export-harian-excel', [LaporanController::class, 'exportHarianExcel']);

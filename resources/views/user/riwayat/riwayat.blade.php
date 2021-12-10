@@ -39,7 +39,7 @@
         </div>
         <div class="row">
             <div class="col-md">
-                <div class="card box-sd">
+                <div class="card">
                     <div class="card-body">
                         <table id="table" class="table table-striped table-sm">
                             <thead>
@@ -70,6 +70,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modal-body">
+
+                    <div class="row">
+                        <div class="col-md text-center">
+                            <h5>PT. SARANA PRIMA MANDIRI</h5>
+                            <h6>Jl. Tebet Utara, Jakarta Selatan</h6>
+                            <h6>021 - 123456</h6>
+                        </div>
+                    </div>
 
                     <div class="row my-4">
                         <div class="col-md-3">

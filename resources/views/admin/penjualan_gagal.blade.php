@@ -25,7 +25,7 @@
         </div>
         <div class="row">
             <div class="col-md">
-                <div class="card box-sd">
+                <div class="card">
                     <div class="card-body">
                         <table id="table" class="table table-striped table-sm">
                             <thead>

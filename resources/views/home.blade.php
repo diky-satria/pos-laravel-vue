@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> 
 @endsection
 
 @push('js')
@@ -103,7 +103,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: '5 barang paling sering di beli',
+                    text: JSON.parse(data_doughnut).length <= 0 ? 'Data di chart doughnut masih kosong' : '5 barang paling sering di beli',
                     padding: {
                         top: 10,
                         bottom: 10
@@ -113,6 +113,7 @@
             responsive: true
         }
     })
+
 
     // line chart
     const ctx2 = document.getElementById('line').getContext('2d');

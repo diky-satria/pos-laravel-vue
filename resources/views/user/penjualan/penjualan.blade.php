@@ -46,7 +46,7 @@
                         <div class="form-text text-danger" v-if="errors['id_barang']">@{{ errors['id_barang'][0] }}</div>
                     </div>
                 </div>
-                <div class="col-md-2" id="cetak2">
+                <div class="col-md-2">
                     <button type="submit" class="btn btn-sm btn-primary d-flex" id="btn-tambahkan">
                         <div>Tambahkan</div>
                         <div>
@@ -59,7 +59,6 @@
                             </svg>
                         </div>
                     </button>
-
                 </div>            
             </div>
         </form>
@@ -136,7 +135,7 @@
                                     <div class="row" id="cetak6">
                                         <div class="col-3"></div>
                                         <div class="col-9">
-                                            <div class="d-grid gap-1 mt-2">
+                                            <div class="d-grid gap-1 mt-2" :class="!print ? 'd-block' : 'd-none'">
                                                 <button type="submit" class="btn btn-sm btn-primary d-flex justify-content-center" id="btn-bayar">
                                                     <div>Bayar</div>
                                                     <div>
@@ -149,6 +148,10 @@
                                                         </svg>
                                                     </div>
                                                 </button>
+                                            </div>
+                                            <div class="d-grid gap-2 mt-2" :class="print ? 'd-block' : 'd-none'">
+                                                <a :href="link_print" target="_blank" class="btn btn-sm btn-success" id="btn-print-lanjutkan">Print</a>
+                                                <a href="penjualan" class="btn btn-sm btn-primary" id="btn-print-lanjutkan">Lanjutkan</a>
                                             </div>
                                         </div>
                                     </div>
@@ -165,12 +168,15 @@
             </div>
         
     </div>
+
+    <!-- overlay -->
+    <div class="overlay-custom" :class="overlay ? 'd-block' : 'd-none'">      
+    </div>
 </div>
 @endsection
 
 @push('js')
 <script src="{{ asset('template/js/select2.js') }}"></script>
-<script src="{{ asset('template/js/html2pdf.js') }}"></script>
 <script>
     $(document).ready(function(){
         $('.js-example-basic-single').select2()
@@ -194,7 +200,10 @@
             null: null,
             error_pelanggan: [],
             umum: 'umum',
-            loadBayar: false
+            loadBayar: false,
+            print: false,
+            overlay: false,
+            link_print: ''
         },
         mounted(){
             this.ambilDataKodeTgl()
@@ -207,6 +216,7 @@
                 let response = await axios.get('kode_tgl')
                 this.kode = response.data.kode
                 this.tgl = response.data.tgl
+                this.link_print = 'print/'+ response.data.kode
             },
             async ambilDataBarang(){
                 let response = await axios.get('select_barang')
@@ -332,36 +342,14 @@
 
                     await axios.post('update_status_transaksi/'+kode, new FormData($('#formUpdateStatusTransaksi')[0]))
 
-                    Swal.fire({
-                        title: 'Pembayaran berhasil',
-                        text: "Silahkan pilih 'Transaksi Baru' atau 'Cetak Struk'",
-                        icon: 'success',
-                        showDenyButton: true,
-                        denyButtonText: 'Cetak Struk',
-                        denyButtonColor: 'green',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Transaksi Baru',
-                        allowOutsideClick: false,
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'penjualan'
-                            } else if (result.isDenied) {
-                                this.cetakStruk()
-                                setTimeout(() => {
-                                    Swal.fire({
-                                        title: 'Berhasil',
-                                        icon: 'success',
-                                        confirmButtonColor: '#3085d6',
-                                        confirmButtonText: 'Lanjutkan Transaksi',
-                                        allowOutsideClick: false,
-                                        }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            window.location.href = 'penjualan'
-                                        }
-                                    })
-                                }, 1000)
-                            }
-                    })
+                    Swal.fire(
+                        'Pembayaran berhasil',
+                        'Selanjutnya pilih "Print" atau "Lanjutkan"',
+                        'success'
+                    )
+
+                    this.overlay = true
+                    this.print = true
 
                     this.loadBayar = false
                 }catch(e){

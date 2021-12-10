@@ -53,11 +53,11 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link {{ request()->is('supplier') ? 'active' : '' }}" href="{{ url('supplier') }}">
+                                    <a id="supplier_active" class="nav-link {{ request()->is('supplier') ? 'active' : '' }}" href="{{ url('supplier') }}">
                                         Supplier
                                     </a>
-                                    <a class="nav-link {{ request()->is('kategori') ? 'active' : '' }}" href="{{ url('kategori') }}">Kategori</a>
-                                    <a class="nav-link {{ request()->is('barangs') ? 'active' : '' }}" href="{{ url('barangs') }}">Barang</a>
+                                    <a id="kategori_active" class="nav-link {{ request()->is('kategori') ? 'active' : '' }}" href="{{ url('kategori') }}">Kategori</a>
+                                    <a id="barang_active" class="nav-link {{ request()->is('barangs') ? 'active' : '' }}" href="{{ url('barangs') }}">Barang</a>
                                 </nav>
                             </div>
                             <a class="nav-link {{ request()->is('penjualan_gagal') ? 'active' : '' }}" href="{{ url('penjualan_gagal') }}">
@@ -74,9 +74,9 @@
                             </a>
                             <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link {{ request()->is('penjualan') ? 'active' : '' }}" href="{{ url('penjualan') }}">Penjualan</a>
-                                    <a class="nav-link {{ request()->is('riwayat') ? 'active' : '' }}" href="{{ url('riwayat') }}">Riwayat</a>
-                                    <a class="nav-link {{ request()->is('pelanggan') ? 'active' : '' }}" href="{{ url('pelanggan') }}">Pelanggan</a>
+                                    <a id="penjualan_active" class="nav-link {{ request()->is('penjualan') ? 'active' : '' }}" href="{{ url('penjualan') }}">Penjualan</a>
+                                    <a id="riwayat_active" class="nav-link {{ request()->is('riwayat') ? 'active' : '' }}" href="{{ url('riwayat') }}">Riwayat</a>
+                                    <a id="pelanggan_active" class="nav-link {{ request()->is('pelanggan') ? 'active' : '' }}" href="{{ url('pelanggan') }}">Pelanggan</a>
                                 </nav>
                             </div>
 
@@ -87,8 +87,8 @@
                             </a>
                             <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link {{ request()->is('barang-in') ? 'active' : '' }}" href="{{ url('barang-in') }}">Barang In</a>
-                                    <a class="nav-link {{ request()->is('barang-out') ? 'active' : '' }}" href="{{ url('barang-out') }}">Barang Out</a>
+                                    <a id="barang_in_active" class="nav-link {{ request()->is('barang-in') ? 'active' : '' }}" href="{{ url('barang-in') }}">Barang In</a>
+                                    <a id="barang_out_active" class="nav-link {{ request()->is('barang-out') ? 'active' : '' }}" href="{{ url('barang-out') }}">Barang Out</a>
                                 </nav>
                             </div>
 
@@ -99,8 +99,8 @@
                             </a>
                             <div class="collapse" id="collapseLayouts3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link {{ request()->is('laporan-harian') ? 'active' : '' }}" href="{{ url('laporan-harian') }}">Harian</a>
-                                    <a class="nav-link {{ request()->is('laporan-bulanan') ? 'active' : '' }}" href="{{ url('laporan-bulanan') }}">Bulanan</a>
+                                    <a id="laporan_harian_active" class="nav-link {{ request()->is('laporan-harian') ? 'active' : '' }}" href="{{ url('laporan-harian') }}">Harian</a>
+                                    <a id="laporan_bulanan_active" class="nav-link {{ request()->is('laporan-bulanan') ? 'active' : '' }}" href="{{ url('laporan-bulanan') }}">Bulanan</a>
                                 </nav>
                             </div>
 
@@ -139,7 +139,7 @@
                 <main>
                    @yield('content')
                 </main>
-                <footer class="py-4 bg-light mt-auto">
+                <footer class="py-4 bg-light mt-5">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-center small">
                             <div class="text-muted">Copyright &copy; Tugas Besar</div>
@@ -148,7 +148,9 @@
                 </footer>
             </div>
         </div>
+
         <script src="{{ asset('template/js/jquery.js') }}"></script>
+        <script src="{{ asset('template/js/custom_link_active.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="{{ asset('template/js/scripts.js') }}"></script>
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -185,7 +187,21 @@
                 background: 'rgb(91, 255, 96)'
             })
 
-            
+            // toast fail
+            const toastFail = Swal.mixin({
+                toast: true,
+                position: 'top-start',
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                },
+                iconColor: 'green',
+                background: 'rgb(255, 71, 71)'
+            })
+
         </script>
 
         @stack('js')

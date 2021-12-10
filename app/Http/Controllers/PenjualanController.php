@@ -237,4 +237,25 @@ class PenjualanController extends Controller
             'message' => 'status transaksi berhasil di update'
         ]);
     }
+
+    public function print($kode)
+    {
+        $transaksi = Transaksi::where('kode', $kode)->first(); 
+        $detail = $transaksi->transaksi_barangs()->get();
+
+        $data = [];
+
+        foreach($detail as $d){
+            $data[] = [
+                'nama_barang' => $d->nama,
+                'harga' => $d->harga,
+                'jumlah' => $d->pivot->qty,
+            ];
+        }
+
+        return view('user.penjualan.print', [
+            'transaksi' => $transaksi,
+            'data' => $data
+        ]);
+    }
 }

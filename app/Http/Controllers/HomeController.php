@@ -53,7 +53,7 @@ class HomeController extends Controller
         // line chart
         $data_line = [];
         foreach(range(1,12) as $month){
-            $data_line[] = Transaksi::select(DB::raw('COUNT(*) as total'))->whereMonth('tgl', $month)->first()->total;
+            $data_line[] = Transaksi::select(DB::raw('COUNT(*) as total'))->whereMonth('tgl', $month)->whereYear('tgl', now())->first()->total;
         }
         
         return view('home', [

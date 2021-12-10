@@ -1,11 +1,8 @@
-.card{
-    border:1px solid transparent !important;
-}
-.box-sd{
+/* .box-sd{
     box-shadow: inset 3px 3px 3px rgb(206, 206, 206),
-                inset -3px -3px 3px white !important;
+                inset -3px -3px 3px rgb(245, 245, 245) !important;
     border-radius:10px !important;
-}
+} */
 .form-control{
     box-shadow: none !important;
 }
@@ -19,4 +16,18 @@
 .nav-link.active .sb-nav-link-icon{
     color:black !important;
     font-weight: bold;
+}
+.overlay-custom{
+    display:block;
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    right:0;
+    bottom:0;
+    background-color:rgba(0, 0, 0, 0.329) !important;
+    z-index:10;
+}
+#btn-print-lanjutkan{
+    z-index:100 !important;
+    box-shadow:2px 2px 8px white !important;
 }
