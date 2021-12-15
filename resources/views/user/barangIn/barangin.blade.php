@@ -85,7 +85,7 @@
                             <!-- tambah -->
                             <textarea v-if="!editMode" class="form-control" name="keterangan" rows="4" id="keterangan"></textarea>
                             <!-- edit -->
-                            <textarea v-if="editMode" class="form-control" name="keterangan" rows="4">@{{ formEdit.keterangan }}</textarea>
+                            <textarea v-if="editMode" class="form-control" name="keterangan" rows="4" :value="formEdit.keterangan"></textarea>
                         </div>
                         <button type="submit" class="btn btn-sm btn-primary float-end d-flex" id="btn-submit">
                             <div>

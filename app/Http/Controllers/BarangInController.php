@@ -92,7 +92,7 @@ class BarangInController extends Controller
             'message' => 'barang_in berhasil ditambahkan'
         ]);
     }
-
+ 
     public function show($id)
     {
         $barang = BarangIn::find($id);
@@ -102,7 +102,7 @@ class BarangInController extends Controller
             'tanggal' => date('j M Y', strtotime($barang->tanggal)),
             'id_barang' => $barang->id_barang,
             'penambahan' => $barang->penambahan,
-            'keterangan' => $barang->keterangan != null ? $barang->keterangan : ''
+            'keterangan' => $barang->keterangan == null ? '' : $barang->keterangan,
         ];
 
         return response()->json([

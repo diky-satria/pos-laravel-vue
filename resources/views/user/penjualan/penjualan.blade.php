@@ -87,10 +87,10 @@
                             <td>@{{ d.nama }}</td>
                             <td>@{{ format_rupiah(d.harga, 'Rp. ') }}</td>
                             <td>
-                                <button class="btn btn-sm btn-success cetak" id="cetak3" @click="kurang(d.id, d.id_pivot)">-</button>
+                                <button class="btn btn-sm btn-success cetak" id="cetak3" title="Kurang" @click="kurang(d.id, d.id_pivot)"><i class="fas fa-minus"></i></button>
                                 @{{ d.qty }}
-                                <button class="btn btn-sm btn-success cetak" id="cetak4" @click="tambah(d.id, d.id_pivot)">+</button>
-                                <button class="btn btn-sm btn-danger cetak" id="cetak5" @click="hapus(d.id, d.id_pivot, d.qty)">x</button>
+                                <button class="btn btn-sm btn-success cetak" id="cetak4" title="Tambah" @click="tambah(d.id, d.id_pivot)"><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-sm btn-danger cetak" id="cetak5" title="Hapus" @click="hapus(d.id, d.id_pivot, d.qty)"><i class="fas fa-trash"></i></button>
                             </td>
                             <td class="text-end">@{{ format_rupiah((d.harga * d.qty), 'Rp. ') }}</td>
                         </tr>
@@ -111,7 +111,7 @@
                                     <div class="row">
                                         <label for="staticEmail" class="col-sm-3 col-form-label"><div class="float-end fw-bold">Tunai</div></label>
                                         <div class="col-sm-9">
-                                            <input id="tunai" name="tunai" type="text" v-model="tunai" class="form-control fce text-end">
+                                            <input id="tunai" name="tunai" type="number" v-model="tunai" class="form-control fce text-end">
                                             <div class="form-text text-danger" v-if="error_pelanggan['tunai']">@{{ error_pelanggan['tunai'][0] }}</div>
                                         </div>
                                     </div>
@@ -178,6 +178,7 @@
 @push('js')
 <script src="{{ asset('template/js/select2.js') }}"></script>
 <script>
+    
     $(document).ready(function(){
         $('.js-example-basic-single').select2()
         $('.js-example-basic-single2').select2()
@@ -340,16 +341,25 @@
                     btn.setAttribute('disabled', true)
                     this.loadBayar = true
 
-                    await axios.post('update_status_transaksi/'+kode, new FormData($('#formUpdateStatusTransaksi')[0]))
+                    if(this.tunai < this.total){
+                        toastFail.fire({
+                            icon: 'error',
+                            title: 'Uang tunai belum cukup'
+                        })
+                        btn.removeAttribute('disabled', false)
+                    }else{
+                        await axios.post('update_status_transaksi/'+kode, new FormData($('#formUpdateStatusTransaksi')[0]))
+    
+                        Swal.fire(
+                            'Pembayaran berhasil',
+                            'Selanjutnya pilih "Print" atau "Lanjutkan"',
+                            'success'
+                        )
+                        this.overlay = true
+                        this.print = true
+                        btn.removeAttribute('disabled', false)
+                    }
 
-                    Swal.fire(
-                        'Pembayaran berhasil',
-                        'Selanjutnya pilih "Print" atau "Lanjutkan"',
-                        'success'
-                    )
-
-                    this.overlay = true
-                    this.print = true
 
                     this.loadBayar = false
                 }catch(e){
